@@ -13,6 +13,7 @@ def get_token_id(file_name): # Функция для чтения токена �
     return [token, id_one]
 
 
+
 def find_max_dpi(dict_in_search): # Функция возвращает ссылку на фото максимального размера и размер фото
     max_dpi = 0  # Задаем начальный размер фото для сравнения
     need_elem = 0 # Начальный индекс элемента 
@@ -110,11 +111,10 @@ class Yandex:
         in_folder_list = []
         for elem in resource:
             in_folder_list.append(elem['name'])
-        return in_folder_list
+        return in_folder_list  # Возвращает список файлов в папке на диске
 
-    def create_copy(self, dict_files):
-        """Метод загрузки фотографий на Я-диск"""
-        files_in_folder = self._in_folder(self.folder)
+    def create_copy(self, dict_files): # Загрузка файлов на яндекс-диск
+        files_in_folder = self._in_folder(self.folder) # Берем список загружаемых файлов и предыдущей функции
         copy_counter = 0
         for key, i in zip(dict_files.keys(), tqdm(range(self.added_files_num))):
             if copy_counter < self.added_files_num:
@@ -137,12 +137,12 @@ if __name__ == '__main__':
 
     tokenVK = 'token_id.txt'  # токен и id доступа хранятся в файле (построчно)
     tokenYandex = 'yandex_token.txt'  # хранится только токен яндекс диска
-
+    photo_count = int(input('Введите количество фото:'))
     photo_load_vk = Vk_photo(get_token_id(tokenVK))  # Получение JSON списка с информацией о фотографииях
 
     with open('photo.json', 'w') as outfile:  # Сохранение JSON списка ф файл my_VK_photo.json
         json.dump(photo_load_vk.json, outfile)
 
-
-    my_yandex = Yandex('фото из вк', get_token_id(tokenYandex), 5)  # Создаем экземпляр класса Yandex с параметрами: "Имя папки", "Токен" и количество скачиваемых файлов
+    
+    my_yandex = Yandex('фото из вк', get_token_id(tokenYandex),photo_count)  # Создаем экземпляр класса Yandex с параметрами: "Имя папки", "Токен" и количество скачиваемых файлов
     my_yandex.create_copy(photo_load_vk.export_dict)  # Вызываем метод create_copy для копирования фотографий с VK на Я-диск
